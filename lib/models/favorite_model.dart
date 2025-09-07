@@ -1,29 +1,22 @@
-import 'indie_model.dart';
+import 'package:game_track/models/game_detail.dart';
 
 class FavoriteGames {
-  FavoriteGames._privateConstructor();
+  FavoriteGames._();
+  static final FavoriteGames instance = FavoriteGames._();
 
-  static final FavoriteGames instance = FavoriteGames._privateConstructor();
+  final List<GameDetail> _items = [];
 
-  final List<Game_Indie> games = [];
+  List<GameDetail> get favorites => List.unmodifiable(_items);
 
-  bool isFavorite(Game_Indie game) => games.contains(game);
-
-  void add(Game_Indie game) {
-    if (!isFavorite(game)) {
-      games.add(game);
-    }
+  bool isFavorite(GameDetail game) {
+    return _items.any((g) => g.appId == game.appId);
   }
 
-  void remove(Game_Indie game) {
-    games.remove(game);
-  }
-
-  void toggleFavorite(Game_Indie game) {
+  void toggleFavorite(GameDetail game) {
     if (isFavorite(game)) {
-      remove(game);
+      _items.removeWhere((g) => g.appId == game.appId);
     } else {
-      add(game);
+      _items.add(game);
     }
   }
 }

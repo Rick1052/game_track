@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:game_track/screens/home_app.dart';
+import 'package:game_track/features/products/presentation/pages/home_app.dart';
 
 void main() {
   runApp(const GameTrackApp());
@@ -29,10 +29,7 @@ class _GameTrackAppState extends State<GameTrackApp> {
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
       themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
-      home: HomeApp(
-        isDarkMode: isDarkMode,
-        onThemeChanged: _handleThemeChanged,
-      ),
+      home: HomeApp(isDarkMode: isDarkMode, onThemeChanged: _handleThemeChanged)
     );
   }
 }

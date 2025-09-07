@@ -1,27 +1,20 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:game_track/screens/home_app.dart';
-import 'package:game_track/screens/config.dart';
-import 'package:game_track/screens/favorites_page.dart';
-import 'package:game_track/models/favorite_model.dart';
-import 'package:game_track/models/indie_model.dart';
+import '../molecules/menu_tile.dart';
+import '../../../features/products/presentation/pages/home_app.dart';
+import '../../../features/profile/presentation/pages/config.dart';
+import '../../../features/products/presentation/pages/favorites_page.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool isDarkMode;
   final ValueChanged<bool> onThemeChanged;
 
-  // Opcionais
-  final FavoriteGames? favorites;
-  final List<Game_Indie>? allGames;
-
   const CustomAppBar({
     super.key,
     this.title = "GameTrack",
     required this.isDarkMode,
     required this.onThemeChanged,
-    this.favorites,
-    this.allGames,
   });
 
   @override
@@ -41,7 +34,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     showDialog(
       context: context,
       barrierColor: Colors.black.withAlpha(100),
-      builder: (context) {
+      builder: (_) {
         return Dialog.fullscreen(
           backgroundColor: Colors.transparent,
           child: Stack(
@@ -75,8 +68,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        _buildMenuTile(
-                          context,
+                        MenuTile(
                           icon: Icons.dashboard_rounded,
                           label: 'Dashboard',
                           onTap: () {
@@ -91,22 +83,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                             );
                           },
                         ),
-                        _buildMenuTile(
-                          context,
+                        MenuTile(
                           icon: Icons.favorite,
                           label: 'Favoritos',
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
-                                builder: (_) =>
-                                    FavoritesPage(),
-                              ),
+                              MaterialPageRoute(builder: (_) => const FavoritesPage()),
                             );
                           },
                         ),
-                        _buildMenuTile(
-                          context,
+                        MenuTile(
                           icon: Icons.settings,
                           label: 'Configurações',
                           onTap: () {
@@ -126,12 +113,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 20),
-                    child: ListTile(
-                      leading: const Icon(Icons.outbox, color: Colors.white),
-                      title: const Text(
-                        'Sair',
-                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
-                      ),
+                    child: MenuTile(
+                      icon: Icons.outbox,
+                      label: 'Sair',
                       onTap: () => Navigator.pop(context),
                     ),
                   ),
@@ -140,21 +124,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ],
           ),
         );
-      },
-    );
-  }
-
-  Widget _buildMenuTile(BuildContext context,
-      {required IconData icon, required String label, required VoidCallback onTap}) {
-    return ListTile(
-      leading: Icon(icon, color: Colors.white),
-      title: Text(
-        label,
-        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
-      ),
-      onTap: () {
-        Navigator.pop(context); // fecha o menu
-        onTap();
       },
     );
   }
