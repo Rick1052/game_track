@@ -15,6 +15,7 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
+---
 
 # GameTrack - Diário de Jogos
 
@@ -31,16 +32,37 @@ GameTrack é um aplicativo voltado para jogadores que desejam organizar e acompa
 - **Diário de progresso:** Funciona como um quadro de referência rápido para acompanhar os jogos que você já jogou e os que deseja jogar.
 - **Interface visual intuitiva:** Navegação simples e amigável para gerenciamento dos jogos.
 - **Favoritos:** Marque seus jogos preferidos para acessá-los rapidamente.
+- **Autenticação de Usuário:** Login e registro com validação de campos.
+- **Persistência de dados local:** Usuários salvos no SQLite.
+- **Configuração de temas:** Alternância entre tema claro, escuro e automático.
 
 ## Tecnologias Utilizadas
 
 - Flutter (Dart) para desenvolvimento mobile multiplataforma.
-- Widgets personalizados para exibição de cards de jogos.
-- Gerenciamento de estado para favoritos e classificação dos jogos.
+- SQLite via `DBHelper` para persistência local de usuários.
+- Widgets personalizados para exibição de forms, botões e indicadores de loading.
+- Gerenciamento de estado simples para alternância de telas e temas.
 
 ## Estrutura do Projeto
 
-- `lib/screens/` - Telas do aplicativo (Home, Configurações, Favoritos).
-- `lib/models/` - Modelos de dados dos jogos e favoritos.
-- `lib/widgets/` - Componentes reutilizáveis como cards de jogos e AppBar personalizada.
-- `assets/images/` - Imagens dos jogos e ícones do aplicativo.
+- `lib/screens/` - Telas do aplicativo (Home, Configurações, Favoritos, Login, Registro).
+- `lib/features/auth/` - Lógica de autenticação (login, registro, forms).
+- `lib/models/` - Modelos de dados dos jogos e usuários.
+- `lib/shared/widgets/` - Componentes reutilizáveis como cards, inputs e botões.
+- `lib/shared/utils/` - Helpers como `DBHelper` para SQLite.
+- `assets/images/` - Imagens dos jogos, ícones e avatar do usuário.
+
+## Como Rodar
+
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/Rick1052/game_track.git
+
+2. Instale as dependências:
+   ```bash
+   flutter pub get
+
+3. Rode o aplicativo:
+   ```bash
+   flutter run
+
