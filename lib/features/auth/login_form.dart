@@ -3,12 +3,17 @@ import '../../../../shared/utils/db_helper.dart';
 import '../../../../shared/widgets/atoms/custom_button.dart';
 import '../../../../shared/widgets/atoms/loading_indicator.dart';
 import '../../shared/widgets/molecules/input_with_label.dart';
-import '../products/presentation/pages/home_app.dart'; // Importe sua tela principal
+// import '../products/presentation/pages/home_app.dart'; // Importe sua tela principal
 
 class LoginForm extends StatefulWidget {
   final VoidCallback onToggle;
+  final VoidCallback onLoginSuccess; // <-- novo
 
-  const LoginForm({super.key, required this.onToggle});
+  const LoginForm({
+    super.key,
+    required this.onToggle,
+    required this.onLoginSuccess,
+  });
 
   @override
   State<LoginForm> createState() => _LoginFormState();
@@ -34,17 +39,7 @@ class _LoginFormState extends State<LoginForm> {
       if (!mounted) return;
 
       if (user != null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) => HomeApp(
-              isDarkMode: false, // ou pegar de algum estado
-              onThemeChanged: (value) {
-                // Aqui você pode atualizar algum estado global se quiser
-              },
-            ),
-          ),
-        );
+        widget.onLoginSuccess(); // ✅ chama a função passada da AuthPage
       } else {
         setState(() {
           _errorMessage = 'Email ou senha inválidos';
@@ -56,8 +51,8 @@ class _LoginFormState extends State<LoginForm> {
         _errorMessage = 'Erro ao logar: $e';
       });
     } finally {
-      if (!mounted) return;
-      setState(() => _loading = false);
+      // Apenas atualize o estado, sem return
+      if (mounted) setState(() => _loading = false);
     }
   }
 

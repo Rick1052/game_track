@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:game_track/features/products/presentation/pages/home_app.dart';
+import 'features/auth/auth_page.dart';
 
 void main() {
   runApp(const GameTrackApp());
@@ -13,13 +13,7 @@ class GameTrackApp extends StatefulWidget {
 }
 
 class _GameTrackAppState extends State<GameTrackApp> {
-  bool isDarkMode = false; // estado global do tema
-
-  void _handleThemeChanged(bool value) {
-    setState(() {
-      isDarkMode = value;
-    });
-  }
+  bool isDarkMode = false;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +23,7 @@ class _GameTrackAppState extends State<GameTrackApp> {
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
       themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
-      home: HomeApp(isDarkMode: isDarkMode, onThemeChanged: _handleThemeChanged)
+      home: AuthPage(), // inicia direto na tela de login/cadastro
     );
   }
 }

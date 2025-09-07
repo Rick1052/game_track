@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../shared/widgets/organisms/auth_header.dart';
 import 'login_form.dart';
 import 'registration_form.dart';
+import '../products/presentation/pages/home_app.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
@@ -25,7 +26,22 @@ class _AuthPageState extends State<AuthPage> {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: showLogin
-                  ? LoginForm(onToggle: toggleForm)
+                  ? LoginForm(
+                      onToggle: toggleForm,
+                      onLoginSuccess: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => HomeApp(
+                              isDarkMode: false,
+                              onThemeChanged: (value) {
+                                // atualizar tema global se necessário
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    )
                   : RegistrationForm(onToggle: toggleForm),
             ),
           ],

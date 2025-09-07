@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../molecules/icon_text_button.dart';
+import 'package:logger/logger.dart';
 
 class MenuList extends StatefulWidget {
   final ValueChanged<bool> onThemeChanged;
@@ -12,13 +13,14 @@ class MenuList extends StatefulWidget {
 
 class _MenuListState extends State<MenuList> {
   int? selectedIndex;
+  final Logger logger = Logger();
 
   @override
   Widget build(BuildContext context) {
     final menuItems = [
       {'icon': Icons.home, 'label': 'Início', 'onTap': () => Navigator.pop(context)},
-      {'icon': Icons.supervised_user_circle, 'label': 'Usuário', 'onTap': () => print('Usuário')},
-      {'icon': Icons.password_rounded, 'label': 'Senhas', 'onTap': () => print('Senha')},
+      {'icon': Icons.supervised_user_circle, 'label': 'Usuário', 'onTap': () => logger.i('Usuário')},
+      {'icon': Icons.password_rounded, 'label': 'Senhas', 'onTap': () => logger.i('Senha')},
       {'icon': Icons.brightness_6, 'label': 'Tema', 'onTap': () => _showThemeDialog(context)},
     ];
 
@@ -38,7 +40,11 @@ class _MenuListState extends State<MenuList> {
           child: IconTextButton(
             icon: item['icon'] as IconData,
             label: item['label'] as String,
-            onTap: () {},
+            onTap: () {
+              // Garante que o clique do botão execute o mesmo do InkWell
+              setState(() => selectedIndex = index);
+              (item['onTap'] as VoidCallback)();
+            },
           ),
         );
       },
@@ -49,6 +55,7 @@ class _MenuListState extends State<MenuList> {
     showModalBottomSheet(
       context: context,
       builder: (_) => Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           ListTile(
             leading: const Icon(Icons.light_mode),

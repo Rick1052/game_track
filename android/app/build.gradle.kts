@@ -7,8 +7,8 @@ plugins {
 
 android {
     namespace = "com.example.game_track"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    compileSdk = 34  // ou sua versão atual
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

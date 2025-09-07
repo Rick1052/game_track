@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../molecules/profile_header.dart';
 import '../molecules/menu_option_tile.dart';
+import 'package:logger/logger.dart';
 
 class ConfigBody extends StatefulWidget {
   final ValueChanged<bool> onThemeChanged;
@@ -13,19 +14,27 @@ class ConfigBody extends StatefulWidget {
 
 class _ConfigBodyState extends State<ConfigBody> {
   int? selectedIndex;
+  final Logger logger = Logger(); // <-- Inicializando a instância do Logger
 
   @override
   Widget build(BuildContext context) {
     final menuItems = [
-      {'icon': Icons.brightness_6, 'label': 'Tema', 'onTap': () => _showThemeDialog(context)},
-      {'icon': Icons.supervised_user_circle, 'label': 'Usuário', 'onTap': () => print('Usuário')},
-      {'icon': Icons.password_rounded, 'label': 'Senhas', 'onTap': () => print('Senhas')},
+      {
+        'icon': Icons.brightness_6,
+        'label': 'Tema',
+        'onTap': () => _showThemeDialog(context)
+      },
+      {'icon': Icons.supervised_user_circle, 'label': 'Usuário', 'onTap': () => logger.i('Usuário')},
+      {'icon': Icons.password_rounded, 'label': 'Senhas', 'onTap': () => logger.i('Senhas')},
     ];
 
     return Column(
       children: [
         const SizedBox(height: 50),
-        const ProfileHeader(name: 'Shaolin Mata Porco', imagePath: 'assets/images/user.png'),
+        const ProfileHeader(
+          name: 'Shaolin Mata Porco',
+          imagePath: 'assets/images/user.png',
+        ),
         const Divider(height: 32),
         Expanded(
           child: ListView.separated(
