@@ -1,0 +1,86 @@
+{
+  "@@locale": "pt",
+  "appTitle": "GameTrack",
+  "@appTitle": {
+    "description": "Título do aplicativo"
+  },
+  "login": "Entrar",
+  "register": "Registrar",
+  "email": "E-mail",
+  "password": "Senha",
+  "confirmPassword": "Confirmar senha",
+  "forgotPassword": "Esqueci minha senha",
+  "signInWithGoogle": "Entrar com Google",
+  "username": "Nome de usuário",
+  "displayName": "Nome de exibição",
+  "home": "Início",
+  "search": "Buscar",
+  "upload": "Enviar",
+  "profile": "Perfil",
+  "settings": "Configurações",
+  "logout": "Sair",
+  "follow": "Seguir",
+  "following": "Seguindo",
+  "unfollow": "Deixar de seguir",
+  "likes": "Curtidas",
+  "comments": "Comentários",
+  "views": "Visualizações",
+  "followers": "Seguidores",
+  "videos": "Vídeos",
+  "score": "Pontos",
+  "editProfile": "Editar perfil",
+  "myVideos": "Meus vídeos",
+  "catalog": "Catálogo",
+  "redeem": "Resgatar",
+  "pointsCost": "Custo: {points} pontos",
+  "@pointsCost": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "privacy": "Privacidade",
+  "notifications": "Notificações",
+  "language": "Idioma",
+  "theme": "Tema",
+  "dark": "Escuro",
+  "light": "Claro",
+  "system": "Sistema",
+  "save": "Salvar",
+  "cancel": "Cancelar",
+  "delete": "Excluir",
+  "share": "Compartilhar",
+  "loading": "Carregando...",
+  "error": "Erro",
+  "success": "Sucesso",
+  "retry": "Tentar novamente",
+  "noVideos": "Nenhum vídeo encontrado",
+  "noUsers": "Nenhum usuário encontrado",
+  "uploadVideo": "Enviar vídeo",
+  "selectVideo": "Selecionar vídeo",
+  "compressVideo": "Comprimir vídeo",
+  "videoTitle": "Título do vídeo",
+  "videoDescription": "Descrição (opcional)",
+  "gameName": "Nome do jogo (opcional)",
+  "uploading": "Enviando...",
+  "uploadSuccess": "Vídeo enviado com sucesso!",
+  "uploadError": "Erro ao enviar vídeo",
+  "like": "Curtir",
+  "unlike": "Descurtir",
+  "alreadyLiked": "Você já curtiu este vídeo",
+  "searchUsers": "Buscar usuários",
+  "noResults": "Nenhum resultado encontrado",
+  "pointsEarned": "Pontos ganhos: {points}",
+  "@pointsEarned": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "insufficientPoints": "Pontos insuficientes",
+  "redemptionSuccess": "Resgate realizado com sucesso!",
+  "redemptionError": "Erro ao resgatar voucher"
+}
+

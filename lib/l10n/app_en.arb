@@ -1,0 +1,83 @@
+{
+  "@@locale": "en",
+  "appTitle": "GameTrack",
+  "login": "Login",
+  "register": "Register",
+  "email": "Email",
+  "password": "Password",
+  "confirmPassword": "Confirm password",
+  "forgotPassword": "Forgot password",
+  "signInWithGoogle": "Sign in with Google",
+  "username": "Username",
+  "displayName": "Display name",
+  "home": "Home",
+  "search": "Search",
+  "upload": "Upload",
+  "profile": "Profile",
+  "settings": "Settings",
+  "logout": "Logout",
+  "follow": "Follow",
+  "following": "Following",
+  "unfollow": "Unfollow",
+  "likes": "Likes",
+  "comments": "Comments",
+  "views": "Views",
+  "followers": "Followers",
+  "videos": "Videos",
+  "score": "Score",
+  "editProfile": "Edit profile",
+  "myVideos": "My videos",
+  "catalog": "Catalog",
+  "redeem": "Redeem",
+  "pointsCost": "Cost: {points} points",
+  "@pointsCost": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "privacy": "Privacy",
+  "notifications": "Notifications",
+  "language": "Language",
+  "theme": "Theme",
+  "dark": "Dark",
+  "light": "Light",
+  "system": "System",
+  "save": "Save",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "share": "Share",
+  "loading": "Loading...",
+  "error": "Error",
+  "success": "Success",
+  "retry": "Retry",
+  "noVideos": "No videos found",
+  "noUsers": "No users found",
+  "uploadVideo": "Upload video",
+  "selectVideo": "Select video",
+  "compressVideo": "Compress video",
+  "videoTitle": "Video title",
+  "videoDescription": "Description (optional)",
+  "gameName": "Game name (optional)",
+  "uploading": "Uploading...",
+  "uploadSuccess": "Video uploaded successfully!",
+  "uploadError": "Error uploading video",
+  "like": "Like",
+  "unlike": "Unlike",
+  "alreadyLiked": "You already liked this video",
+  "searchUsers": "Search users",
+  "noResults": "No results found",
+  "pointsEarned": "Points earned: {points}",
+  "@pointsEarned": {
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "insufficientPoints": "Insufficient points",
+  "redemptionSuccess": "Redemption successful!",
+  "redemptionError": "Error redeeming voucher"
+}
+

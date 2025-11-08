@@ -1,0 +1,68 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+    
+    // Users collection
+    match /users/{userId} {
+      allow read: if true; // Qualquer um pode ler dados de usuários
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      allow update: if isOwner(userId);
+      allow delete: if isOwner(userId);
+      
+      // Subcollections
+      match /followers/{followerId} {
+        allow read: if true;
+        allow write: if isAuthenticated();
+      }
+      
+      match /following/{followingId} {
+        allow read: if true;
+        allow write: if isAuthenticated();
+      }
+    }
+    
+    // Videos collection
+    match /videos/{videoId} {
+      allow read: if true; // Qualquer um pode ler vídeos
+      allow create: if isAuthenticated() 
+        && request.resource.data.ownerId == request.auth.uid;
+      allow update: if isOwner(resource.data.ownerId);
+      allow delete: if isOwner(resource.data.ownerId);
+      
+      // Likes subcollection
+      match /likes/{likeId} {
+        allow read: if true;
+        allow create: if isAuthenticated() && likeId == request.auth.uid;
+        allow delete: if isAuthenticated() && likeId == request.auth.uid;
+      }
+    }
+    
+    // Vouchers collection
+    match /vouchers/{voucherId} {
+      allow read: if true;
+      allow write: if false; // Apenas via Cloud Functions
+    }
+    
+    // Redemptions collection
+    match /redemptions/{redemptionId} {
+      allow read: if isAuthenticated() 
+        && (resource.data.userId == request.auth.uid || isOwner(resource.data.userId));
+      allow create: if false; // Apenas via Cloud Functions
+      allow update: if false; // Apenas via Cloud Functions
+      allow delete: if false;
+    }
+  }
+}
+
