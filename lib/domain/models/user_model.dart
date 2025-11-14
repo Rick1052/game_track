@@ -16,8 +16,10 @@ class UserModel with _$UserModel {
     @Default(0) int followersCount,
     @Default(0) int followingCount,
     @Default(0) int videosCount,
+    // ignore: invalid_annotation_target
     @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
     required DateTime createdAt,
+    // ignore: invalid_annotation_target
     @JsonKey(fromJson: _dateTimeFromTimestampNullable, toJson: _dateTimeToTimestampNullable)
     DateTime? updatedAt,
   }) = _UserModel;

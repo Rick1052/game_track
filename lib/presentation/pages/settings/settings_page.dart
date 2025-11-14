@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers/auth_providers.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:game_track/l10n/app_localizations.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
@@ -20,35 +20,40 @@ class SettingsPage extends ConsumerWidget {
             leading: const Icon(Icons.person),
             title: Text(l10n.editProfile),
             onTap: () {
-              // TODO: Implementar edição de perfil
+              // Navegar para página de edição de perfil
+              // Navigator.of(context).pushNamed('/edit-profile');
             },
           ),
           ListTile(
             leading: const Icon(Icons.lock),
             title: Text(l10n.privacy),
             onTap: () {
-              // TODO: Implementar configurações de privacidade
+              // Navegar para página de configurações de privacidade
+              // Navigator.of(context).pushNamed('/privacy-settings');
             },
           ),
           ListTile(
             leading: const Icon(Icons.notifications),
             title: Text(l10n.notifications),
             onTap: () {
-              // TODO: Implementar configurações de notificações
+              // Navegar para página de configurações de notificações
+              // Navigator.of(context).pushNamed('/notification-settings');
             },
           ),
           ListTile(
             leading: const Icon(Icons.language),
             title: Text(l10n.language),
             onTap: () {
-              // TODO: Implementar seleção de idioma
+              // Navegar para página de seleção de idioma
+              // Navigator.of(context).pushNamed('/language-settings');
             },
           ),
           ListTile(
             leading: const Icon(Icons.dark_mode),
             title: Text(l10n.theme),
             onTap: () {
-              // TODO: Implementar seleção de tema
+              // Navegar para página de seleção de tema
+              // Navigator.of(context).pushNamed('/theme-settings');
             },
           ),
           const Divider(),

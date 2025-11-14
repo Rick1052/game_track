@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers/auth_providers.dart';
-import '../../../core/providers/video_providers.dart';
 import '../../widgets/atoms/primary_button.dart';
 import '../../widgets/atoms/secondary_button.dart';
 import '../../widgets/atoms/custom_text_field.dart';
-import '../../widgets/molecules/auth_form.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:game_track/l10n/app_localizations.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -128,35 +126,32 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     child: TextButton(
                       onPressed: () async {
                         final email = _emailController.text.trim();
+                        final messenger = ScaffoldMessenger.of(context);
                         if (email.isEmpty) {
-                          if (mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Por favor, insira seu email'),
-                              ),
-                            );
-                          }
+                          messenger.showSnackBar(
+                            const SnackBar(
+                              content: Text('Por favor, insira seu email'),
+                            ),
+                          );
                           return;
                         }
                         try {
                           await ref
                               .read(authControllerProvider.notifier)
                               .sendPasswordResetEmail(email);
-                          if (mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                  'Email de recuperação enviado! Verifique sua caixa de entrada.',
-                                ),
+                          if (!mounted) return;
+                          messenger.showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Email de recuperação enviado! Verifique sua caixa de entrada.',
                               ),
-                            );
-                          }
+                            ),
+                          );
                         } catch (e) {
-                          if (mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Erro: $e')),
-                            );
-                          }
+                          if (!mounted) return;
+                          messenger.showSnackBar(
+                            SnackBar(content: Text('Erro: $e')),
+                          );
                         }
                       },
                       child: Text(l10n.forgotPassword),

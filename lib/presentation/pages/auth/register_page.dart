@@ -4,7 +4,7 @@ import '../../../core/providers/auth_providers.dart';
 import '../../widgets/atoms/primary_button.dart';
 import '../../widgets/atoms/secondary_button.dart';
 import '../../widgets/atoms/custom_text_field.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:game_track/l10n/app_localizations.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
@@ -159,19 +159,19 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                     text: l10n.signInWithGoogle,
                     onPressed: () async {
                       setState(() => _isLoading = true);
+                      final navigator = Navigator.of(context);
+                      final messenger = ScaffoldMessenger.of(context);
                       try {
                         await ref
                             .read(authControllerProvider.notifier)
                             .signInWithGoogle();
-                        if (mounted) {
-                          Navigator.of(context).pushReplacementNamed('/home');
-                        }
+                        if (!mounted) return;
+                        navigator.pushReplacementNamed('/home');
                       } catch (e) {
-                        if (mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(e.toString())),
-                          );
-                        }
+                        if (!mounted) return;
+                        messenger.showSnackBar(
+                          SnackBar(content: Text(e.toString())),
+                        );
                       } finally {
                         if (mounted) {
                           setState(() => _isLoading = false);

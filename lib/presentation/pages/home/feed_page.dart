@@ -6,7 +6,7 @@ import '../../../core/providers/repository_providers.dart';
 import '../../../domain/models/video_model.dart';
 import '../../widgets/molecules/video_player_widget.dart';
 import '../../widgets/molecules/like_button.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:game_track/l10n/app_localizations.dart';
 
 class FeedPage extends ConsumerStatefulWidget {
   const FeedPage({super.key});

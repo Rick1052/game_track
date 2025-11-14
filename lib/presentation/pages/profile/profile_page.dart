@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers/user_providers.dart';
-import '../../../core/providers/video_providers.dart';
 import '../../../core/providers/auth_providers.dart';
 import '../../../core/providers/repository_providers.dart';
 import '../../../domain/models/video_model.dart';
 import '../../widgets/atoms/primary_button.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:game_track/l10n/app_localizations.dart';
 
 class ProfilePage extends ConsumerWidget {
   final String? userId;
@@ -113,7 +112,8 @@ class _ProfileHeader extends ConsumerWidget {
                   PrimaryButton(
                     text: 'Editar perfil',
                     onPressed: () {
-                      // TODO: Implementar edição de perfil
+                      // Navegar para página de edição de perfil
+                      // Navigator.of(context).pushNamed('/edit-profile');
                     },
                     width: 120,
                     height: 36,

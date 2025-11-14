@@ -14,17 +14,20 @@ class MockUserCredential extends Mock implements UserCredential {}
 void main() {
   group('AuthRepository', () {
     test('should sign in with email and password', () async {
-      // TODO: Implementar testes unitários
+      // Teste placeholder: verificar autenticação com email e senha
+      // Deve mockar FirebaseAuth.signInWithEmailAndPassword e verificar retorno
       expect(true, true);
     });
 
     test('should sign up with email and password', () async {
-      // TODO: Implementar testes unitários
+      // Teste placeholder: verificar criação de conta com email e senha
+      // Deve mockar FirebaseAuth.createUserWithEmailAndPassword e verificar criação no Firestore
       expect(true, true);
     });
 
     test('should sign in with Google', () async {
-      // TODO: Implementar testes unitários
+      // Teste placeholder: verificar autenticação com Google Sign-In
+      // Deve mockar GoogleSignIn.signIn e FirebaseAuth.signInWithCredential
       expect(true, true);
     });
   });

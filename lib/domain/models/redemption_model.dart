@@ -11,9 +11,11 @@ class RedemptionModel with _$RedemptionModel {
     required String userId,
     required String voucherId,
     required int pointsSpent,
+    // ignore: invalid_annotation_target
     @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
     required DateTime redeemedAt,
     @Default(false) bool isUsed,
+    // ignore: invalid_annotation_target
     @JsonKey(fromJson: _dateTimeFromTimestampNullable, toJson: _dateTimeToTimestampNullable)
     DateTime? usedAt,
   }) = _RedemptionModel;

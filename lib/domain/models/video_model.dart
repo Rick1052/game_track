@@ -17,8 +17,10 @@ class VideoModel with _$VideoModel {
     @Default(0) int likesCount,
     @Default(0) int commentsCount,
     @Default(0) int viewsCount,
+    // ignore: invalid_annotation_target
     @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
     required DateTime createdAt,
+    // ignore: invalid_annotation_target
     @JsonKey(fromJson: _dateTimeFromTimestampNullable, toJson: _dateTimeToTimestampNullable)
     DateTime? updatedAt,
   }) = _VideoModel;

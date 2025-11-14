@@ -4,7 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../../core/providers/repository_providers.dart';
 import '../../widgets/atoms/primary_button.dart';
 import '../../widgets/atoms/custom_text_field.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:game_track/l10n/app_localizations.dart';
 
 class UploadVideoPage extends ConsumerStatefulWidget {
   const UploadVideoPage({super.key});

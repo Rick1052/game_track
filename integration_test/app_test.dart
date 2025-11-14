@@ -10,7 +10,7 @@ void main() {
       app.main();
       await tester.pumpAndSettle();
 
-      // TODO: Implementar testes de integração
+      // Verificar que a página de login é exibida
       expect(find.text('Login'), findsOneWidget);
     });
   });

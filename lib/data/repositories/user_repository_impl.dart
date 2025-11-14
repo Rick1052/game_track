@@ -21,9 +21,13 @@ class UserRepositoryImpl implements UserRepository {
       throw Exception('Usuário não encontrado');
     }
 
+    final data = doc.data();
+    if (data == null) {
+      throw Exception('Documento sem dados: ${doc.id}');
+    }
     return UserModel.fromJson({
       'id': doc.id,
-      ...doc.data()!,
+      ...data,
     });
   }
 
@@ -41,7 +45,7 @@ class UserRepositoryImpl implements UserRepository {
     return snapshot.docs
         .map((doc) => UserModel.fromJson({
               'id': doc.id,
-              ...doc.data()!,
+              ...doc.data(),
             }))
         .toList();
   }
@@ -62,7 +66,7 @@ class UserRepositoryImpl implements UserRepository {
       return snapshot.docs
           .map((doc) => UserModel.fromJson({
                 'id': doc.id,
-                ...doc.data() as Map<String, dynamic>,
+                ...doc.data(),
               }))
           .toList();
     });
@@ -183,7 +187,7 @@ class UserRepositoryImpl implements UserRepository {
     return usersSnapshot.docs
         .map((doc) => UserModel.fromJson({
               'id': doc.id,
-              ...doc.data()!,
+              ...doc.data(),
             }))
         .toList();
   }
@@ -210,7 +214,7 @@ class UserRepositoryImpl implements UserRepository {
     return usersSnapshot.docs
         .map((doc) => UserModel.fromJson({
               'id': doc.id,
-              ...doc.data()!,
+              ...doc.data(),
             }))
         .toList();
   }

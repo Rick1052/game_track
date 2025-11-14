@@ -15,8 +15,10 @@ class VoucherModel with _$VoucherModel {
     required String imageUrl,
     @Default(0) int stock,
     @Default(true) bool isActive,
+    // ignore: invalid_annotation_target
     @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
     required DateTime createdAt,
+    // ignore: invalid_annotation_target
     @JsonKey(fromJson: _dateTimeFromTimestampNullable, toJson: _dateTimeToTimestampNullable)
     DateTime? expiresAt,
   }) = _VoucherModel;

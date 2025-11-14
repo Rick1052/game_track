@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.game_track"
-    compileSdk = 34  // ou sua versão atual
+    compileSdk = 36
     ndkVersion = "27.0.12077973"
 
     compileOptions {

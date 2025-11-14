@@ -25,7 +25,7 @@ class VoucherRepositoryImpl implements VoucherRepository {
     return snapshot.docs
         .map((doc) => VoucherModel.fromJson({
               'id': doc.id,
-              ...doc.data()!,
+              ...doc.data(),
             }))
         .toList();
   }
@@ -71,7 +71,7 @@ class VoucherRepositoryImpl implements VoucherRepository {
     return snapshot.docs
         .map((doc) => RedemptionModel.fromJson({
               'id': doc.id,
-              ...doc.data()!,
+              ...doc.data(),
             }))
         .toList();
   }

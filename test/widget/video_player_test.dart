@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:game_track/presentation/widgets/molecules/video_player_widget.dart';
 
 void main() {
   testWidgets('VideoPlayerWidget should display video', (WidgetTester tester) async {
-    // TODO: Implementar testes de widget
+    // Teste placeholder: verificar renderização do VideoPlayerWidget
+    // Deve criar o widget com uma URL de vídeo e verificar se o player é exibido
     expect(true, true);
   });
 }

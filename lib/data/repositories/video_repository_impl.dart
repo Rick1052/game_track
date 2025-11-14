@@ -79,7 +79,7 @@ class VideoRepositoryImpl implements VideoRepository {
     return snapshot.docs
         .map((doc) => VideoModel.fromJson({
               'id': doc.id,
-              ...doc.data()!,
+              ...doc.data(),
             }))
         .toList();
   }
@@ -217,10 +217,6 @@ class VideoRepositoryImpl implements VideoRepository {
         quality: 50,
         position: 0,
       );
-
-      if (thumbnail == null) {
-        throw Exception('Erro ao gerar thumbnail');
-      }
 
       final videoId = _uuid.v4();
       final thumbnailRef = _storage

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:game_track/l10n/app_localizations.dart';
 import 'core/config/firebase_options.dart';
 import 'presentation/pages/auth/login_page.dart';
 import 'presentation/pages/auth/register_page.dart';
@@ -42,7 +42,7 @@ class GameTrackApp extends ConsumerWidget {
           secondary: Colors.blue,
         ),
       ),
-      localizationsDelegates: const [
+      localizationsDelegates: [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

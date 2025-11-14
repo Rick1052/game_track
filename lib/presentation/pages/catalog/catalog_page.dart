@@ -5,7 +5,7 @@ import '../../../core/providers/auth_providers.dart';
 import '../../../core/providers/repository_providers.dart';
 import '../../../domain/models/voucher_model.dart';
 import '../../widgets/atoms/primary_button.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:game_track/l10n/app_localizations.dart';
 
 class CatalogPage extends ConsumerWidget {
   const CatalogPage({super.key});
