@@ -40,8 +40,27 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       }
     } catch (e) {
       if (mounted) {
+        String errorMessage = 'Erro ao fazer login';
+        if (e.toString().contains('user-not-found')) {
+          errorMessage = 'Usuário não encontrado';
+        } else if (e.toString().contains('wrong-password')) {
+          errorMessage = 'Senha incorreta';
+        } else if (e.toString().contains('invalid-email')) {
+          errorMessage = 'Email inválido';
+        } else if (e.toString().contains('user-disabled')) {
+          errorMessage = 'Usuário desabilitado';
+        } else if (e.toString().contains('too-many-requests')) {
+          errorMessage = 'Muitas tentativas. Tente novamente mais tarde';
+        } else if (e.toString().contains('network-request-failed')) {
+          errorMessage = 'Erro de conexão. Verifique sua internet';
+        } else {
+          errorMessage = e.toString().replaceAll('Exception: ', '');
+        }
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
+          SnackBar(
+            content: Text(errorMessage),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     } finally {
@@ -60,8 +79,19 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       }
     } catch (e) {
       if (mounted) {
+        String errorMessage = 'Erro ao fazer login com Google';
+        if (e.toString().contains('cancelado')) {
+          errorMessage = 'Login cancelado';
+        } else if (e.toString().contains('network-request-failed')) {
+          errorMessage = 'Erro de conexão. Verifique sua internet';
+        } else {
+          errorMessage = e.toString().replaceAll('Exception: ', '');
+        }
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
+          SnackBar(
+            content: Text(errorMessage),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     } finally {

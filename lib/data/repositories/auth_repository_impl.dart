@@ -102,7 +102,18 @@ class AuthRepositoryImpl implements AuthRepository {
       final userCredential = await _auth.signInWithCredential(credential);
       return await _getOrCreateUserData(userCredential.user!);
     } catch (e) {
-      throw Exception('Erro ao fazer login com Google: $e');
+      String errorMessage = 'Erro ao fazer login com Google';
+      final errorString = e.toString();
+      
+      if (errorString.contains('sign_in_failed') || errorString.contains('Api10')) {
+        errorMessage = 'Erro de configuração do Google Sign-In. Verifique se o SHA-1 foi adicionado no Firebase Console e se o OAuth está configurado. Veja CONFIGURAR_GOOGLE_SIGNIN.md para mais detalhes.';
+      } else if (errorString.contains('cancelado')) {
+        errorMessage = 'Login com Google cancelado';
+      } else if (errorString.contains('network')) {
+        errorMessage = 'Erro de conexão. Verifique sua internet';
+      }
+      
+      throw Exception('$errorMessage: $e');
     }
   }
 
@@ -174,7 +185,9 @@ class AuthRepositoryImpl implements AuthRepository {
         .get();
 
     if (!doc.exists) return null;
-    return UserModel.fromJson(doc.data()!);
+    final data = doc.data()!;
+    data['id'] = userId; // Adiciona o ID ao JSON
+    return UserModel.fromJson(data);
   }
 }
 

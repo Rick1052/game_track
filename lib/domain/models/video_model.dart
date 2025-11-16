@@ -13,7 +13,7 @@ class VideoModel with _$VideoModel {
     String? description,
     String? game,
     required String videoUrl,
-    required String thumbnailUrl,
+    String? thumbnailUrl,
     @Default(0) int likesCount,
     @Default(0) int commentsCount,
     @Default(0) int viewsCount,

@@ -24,10 +24,12 @@ mixin _$RedemptionModel {
   String get id => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
   String get voucherId => throw _privateConstructorUsedError;
-  int get pointsSpent => throw _privateConstructorUsedError;
+  int get pointsSpent =>
+      throw _privateConstructorUsedError; // ignoreinvalid_annotation_target
   @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
   DateTime get redeemedAt => throw _privateConstructorUsedError;
-  bool get isUsed => throw _privateConstructorUsedError;
+  bool get isUsed =>
+      throw _privateConstructorUsedError; // ignoreinvalid_annotation_target
   @JsonKey(
     fromJson: _dateTimeFromTimestampNullable,
     toJson: _dateTimeToTimestampNullable,
@@ -237,12 +239,14 @@ class _$RedemptionModelImpl implements _RedemptionModel {
   final String voucherId;
   @override
   final int pointsSpent;
+  // ignoreinvalid_annotation_target
   @override
   @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
   final DateTime redeemedAt;
   @override
   @JsonKey()
   final bool isUsed;
+  // ignoreinvalid_annotation_target
   @override
   @JsonKey(
     fromJson: _dateTimeFromTimestampNullable,
@@ -328,12 +332,12 @@ abstract class _RedemptionModel implements RedemptionModel {
   @override
   String get voucherId;
   @override
-  int get pointsSpent;
+  int get pointsSpent; // ignoreinvalid_annotation_target
   @override
   @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
   DateTime get redeemedAt;
   @override
-  bool get isUsed;
+  bool get isUsed; // ignoreinvalid_annotation_target
   @override
   @JsonKey(
     fromJson: _dateTimeFromTimestampNullable,

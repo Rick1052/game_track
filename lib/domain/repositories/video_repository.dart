@@ -17,7 +17,7 @@ abstract class VideoRepository {
     bool compress = false,
   });
   Future<void> deleteVideo(String videoId);
-  Future<String> generateThumbnail(String videoPath);
+  Future<String> generateThumbnail(String videoPath, String videoId);
   Future<void> likeVideo(String videoId, String userId);
   Future<void> unlikeVideo(String videoId, String userId);
   Future<bool> hasUserLikedVideo(String videoId, String userId);

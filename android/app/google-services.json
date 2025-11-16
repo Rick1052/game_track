@@ -7,12 +7,25 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:751895507697:android:bade7e9eddf924f1462f50",
+        "mobilesdk_app_id": "1:751895507697:android:2c58ff39f8c5e001462f50",
         "android_client_info": {
-          "package_name": "com.example.gametrack"
+          "package_name": "com.example.game_track"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "751895507697-m3r1deqm0pb6i1s4vt6ss36nn765dn22.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.game_track",
+            "certificate_hash": "08456505b6c13c77242aff49c0cc0b321a50e145"
+          }
+        },
+        {
+          "client_id": "751895507697-5higm81fbq3h6i6s5j8l8ig5hh0ivgmq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCbxx0nSzTq-rcl4OMjJB_CczOQpcaTZ7k"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "751895507697-5higm81fbq3h6i6s5j8l8ig5hh0ivgmq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

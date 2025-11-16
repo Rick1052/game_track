@@ -95,6 +95,9 @@ class VideoRepositoryImpl implements VideoRepository {
     final user = _auth.currentUser;
     if (user == null) throw Exception('Usuário não autenticado');
 
+    String? videoId;
+    String? videoUrl;
+    
     try {
       String finalPath = filePath;
       
@@ -109,8 +112,14 @@ class VideoRepositoryImpl implements VideoRepository {
         }
       }
 
-      final videoId = _uuid.v4();
+      videoId = _uuid.v4();
       final videoFile = File(finalPath);
+      
+      // Verificar se o arquivo existe
+      if (!await videoFile.exists()) {
+        throw Exception('Arquivo de vídeo não encontrado: $finalPath');
+      }
+      
       final videoFileName = '$videoId.mp4';
 
       // Upload do vídeo
@@ -119,11 +128,37 @@ class VideoRepositoryImpl implements VideoRepository {
           .child(AppConstants.videosStoragePath)
           .child(videoFileName);
 
-      await videoRef.putFile(videoFile);
-      final videoUrl = await videoRef.getDownloadURL();
+      final uploadTask = videoRef.putFile(videoFile);
+      
+      // Aguardar o upload completar
+      await uploadTask;
+      
+      // Obter a URL de download com retry em caso de erro
+      // O Firebase Storage pode levar um tempo para disponibilizar o arquivo
+      int retries = 5;
+      int delayMs = 1000;
+      while (retries > 0) {
+        try {
+          await Future.delayed(Duration(milliseconds: delayMs));
+          videoUrl = await videoRef.getDownloadURL();
+          break;
+        } catch (e) {
+          retries--;
+          if (retries == 0) {
+            throw Exception('Erro ao obter URL do vídeo após upload: $e');
+          }
+          // Aumentar o tempo de espera a cada tentativa
+          delayMs += 500;
+        }
+      }
 
-      // Gerar thumbnail
-      final thumbnailUrl = await generateThumbnail(finalPath);
+      // Verificar se a URL foi obtida com sucesso
+      if (videoUrl == null) {
+        throw Exception('Não foi possível obter a URL do vídeo após o upload');
+      }
+
+      // Gerar thumbnail usando o mesmo videoId
+      final thumbnailUrl = await generateThumbnail(finalPath, videoId);
 
       // Criar documento no Firestore
       final videoModel = VideoModel(
@@ -155,6 +190,41 @@ class VideoRepositoryImpl implements VideoRepository {
 
       return videoModel;
     } catch (e) {
+      // Se o erro for no thumbnail e o vídeo já foi enviado, tenta continuar sem thumbnail
+      if (e.toString().contains('thumbnail') && videoId != null && videoUrl != null) {
+        try {
+          // Tenta criar o vídeo sem thumbnail
+          final videoModel = VideoModel(
+            id: videoId,
+            ownerId: user.uid,
+            title: title,
+            description: description,
+            game: game,
+            videoUrl: videoUrl,
+            thumbnailUrl: null,
+            createdAt: DateTime.now(),
+          );
+
+          final json = videoModel.toJson();
+          json.remove('id');
+          await _firestore
+              .collection(FirestoreCollections.videos)
+              .doc(videoId)
+              .set(json);
+
+          await _firestore
+              .collection(FirestoreCollections.users)
+              .doc(user.uid)
+              .update({
+            'videosCount': FieldValue.increment(1),
+            'score': FieldValue.increment(AppConstants.pointsPerVideo),
+          });
+
+          return videoModel;
+        } catch (e2) {
+          throw Exception('Erro ao fazer upload do vídeo: $e2');
+        }
+      }
       throw Exception('Erro ao fazer upload do vídeo: $e');
     }
   }
@@ -210,7 +280,7 @@ class VideoRepositoryImpl implements VideoRepository {
   }
 
   @override
-  Future<String> generateThumbnail(String videoPath) async {
+  Future<String> generateThumbnail(String videoPath, String videoId) async {
     try {
       final thumbnail = await VideoCompress.getFileThumbnail(
         videoPath,
@@ -218,14 +288,40 @@ class VideoRepositoryImpl implements VideoRepository {
         position: 0,
       );
 
-      final videoId = _uuid.v4();
+      // Verificar se o arquivo de thumbnail existe
+      if (!await thumbnail.exists()) {
+        throw Exception('Arquivo de thumbnail não encontrado');
+      }
+
       final thumbnailRef = _storage
           .ref()
           .child(AppConstants.thumbnailsStoragePath)
           .child('$videoId.jpg');
 
-      await thumbnailRef.putFile(thumbnail);
-      return await thumbnailRef.getDownloadURL();
+      final uploadTask = thumbnailRef.putFile(thumbnail);
+      
+      // Aguardar o upload completar
+      await uploadTask;
+      
+      // Obter a URL de download com retry em caso de erro
+      // O Firebase Storage pode levar um tempo para disponibilizar o arquivo
+      int retries = 5;
+      int delayMs = 1000;
+      while (retries > 0) {
+        try {
+          await Future.delayed(Duration(milliseconds: delayMs));
+          return await thumbnailRef.getDownloadURL();
+        } catch (e) {
+          retries--;
+          if (retries == 0) {
+            throw Exception('Erro ao obter URL do thumbnail após upload: $e');
+          }
+          // Aumentar o tempo de espera a cada tentativa
+          delayMs += 500;
+        }
+      }
+      
+      throw Exception('Erro ao obter URL do thumbnail após múltiplas tentativas');
     } catch (e) {
       throw Exception('Erro ao gerar thumbnail: $e');
     }

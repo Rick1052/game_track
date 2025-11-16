@@ -246,10 +246,20 @@ class _VideosGrid extends StatelessWidget {
           itemCount: videos.length,
           itemBuilder: (context, index) {
             final video = videos[index];
-            return Image.network(
-              video.thumbnailUrl,
-              fit: BoxFit.cover,
-            );
+            if (video.thumbnailUrl != null) {
+              return Image.network(
+                video.thumbnailUrl!,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(color: Colors.grey[800]!);
+                },
+              );
+            } else {
+              return Container(
+                color: Colors.grey[800],
+                child: const Icon(Icons.video_library, color: Colors.white54),
+              );
+            }
           },
         );
       },

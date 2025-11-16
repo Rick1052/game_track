@@ -39,8 +39,8 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBq9UYncXxMBfoFMB8g8BCOIvYvz4p7xwU',
-    appId: '1:751895507697:web:5e48e3c44c68faf4462f50',
+    apiKey: 'AIzaSyCbxx0nSzTq-rcl4OMjJB_CczOQpcaTZ7k',
+    appId: '1:751895507697:android:2c58ff39f8c5e001462f50',
     messagingSenderId: '751895507697',
     projectId: 'gametrack-d20a7',
     storageBucket: 'gametrack-d20a7.firebasestorage.app',

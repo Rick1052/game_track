@@ -14,7 +14,7 @@ _$VideoModelImpl _$$VideoModelImplFromJson(Map<String, dynamic> json) =>
       description: json['description'] as String?,
       game: json['game'] as String?,
       videoUrl: json['videoUrl'] as String,
-      thumbnailUrl: json['thumbnailUrl'] as String,
+      thumbnailUrl: json['thumbnailUrl'] as String?,
       likesCount: (json['likesCount'] as num?)?.toInt() ?? 0,
       commentsCount: (json['commentsCount'] as num?)?.toInt() ?? 0,
       viewsCount: (json['viewsCount'] as num?)?.toInt() ?? 0,

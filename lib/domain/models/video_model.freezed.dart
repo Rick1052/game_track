@@ -27,12 +27,13 @@ mixin _$VideoModel {
   String? get description => throw _privateConstructorUsedError;
   String? get game => throw _privateConstructorUsedError;
   String get videoUrl => throw _privateConstructorUsedError;
-  String get thumbnailUrl => throw _privateConstructorUsedError;
+  String? get thumbnailUrl => throw _privateConstructorUsedError;
   int get likesCount => throw _privateConstructorUsedError;
   int get commentsCount => throw _privateConstructorUsedError;
-  int get viewsCount => throw _privateConstructorUsedError;
+  int get viewsCount =>
+      throw _privateConstructorUsedError; // ignoreinvalid_annotation_target
   @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
-  DateTime get createdAt => throw _privateConstructorUsedError;
+  DateTime get createdAt => throw _privateConstructorUsedError; // ignoreinvalid_annotation_target
   @JsonKey(
     fromJson: _dateTimeFromTimestampNullable,
     toJson: _dateTimeToTimestampNullable,
@@ -63,7 +64,7 @@ abstract class $VideoModelCopyWith<$Res> {
     String? description,
     String? game,
     String videoUrl,
-    String thumbnailUrl,
+    String? thumbnailUrl,
     int likesCount,
     int commentsCount,
     int viewsCount,
@@ -98,7 +99,7 @@ class _$VideoModelCopyWithImpl<$Res, $Val extends VideoModel>
     Object? description = freezed,
     Object? game = freezed,
     Object? videoUrl = null,
-    Object? thumbnailUrl = null,
+    Object? thumbnailUrl = freezed,
     Object? likesCount = null,
     Object? commentsCount = null,
     Object? viewsCount = null,
@@ -131,10 +132,10 @@ class _$VideoModelCopyWithImpl<$Res, $Val extends VideoModel>
                 ? _value.videoUrl
                 : videoUrl // ignore: cast_nullable_to_non_nullable
                       as String,
-            thumbnailUrl: null == thumbnailUrl
+            thumbnailUrl: freezed == thumbnailUrl
                 ? _value.thumbnailUrl
                 : thumbnailUrl // ignore: cast_nullable_to_non_nullable
-                      as String,
+                      as String?,
             likesCount: null == likesCount
                 ? _value.likesCount
                 : likesCount // ignore: cast_nullable_to_non_nullable
@@ -177,7 +178,7 @@ abstract class _$$VideoModelImplCopyWith<$Res>
     String? description,
     String? game,
     String videoUrl,
-    String thumbnailUrl,
+    String? thumbnailUrl,
     int likesCount,
     int commentsCount,
     int viewsCount,
@@ -211,7 +212,7 @@ class __$$VideoModelImplCopyWithImpl<$Res>
     Object? description = freezed,
     Object? game = freezed,
     Object? videoUrl = null,
-    Object? thumbnailUrl = null,
+    Object? thumbnailUrl = freezed,
     Object? likesCount = null,
     Object? commentsCount = null,
     Object? viewsCount = null,
@@ -244,10 +245,10 @@ class __$$VideoModelImplCopyWithImpl<$Res>
             ? _value.videoUrl
             : videoUrl // ignore: cast_nullable_to_non_nullable
                   as String,
-        thumbnailUrl: null == thumbnailUrl
+        thumbnailUrl: freezed == thumbnailUrl
             ? _value.thumbnailUrl
             : thumbnailUrl // ignore: cast_nullable_to_non_nullable
-                  as String,
+                  as String?,
         likesCount: null == likesCount
             ? _value.likesCount
             : likesCount // ignore: cast_nullable_to_non_nullable
@@ -283,7 +284,7 @@ class _$VideoModelImpl implements _VideoModel {
     this.description,
     this.game,
     required this.videoUrl,
-    required this.thumbnailUrl,
+    this.thumbnailUrl,
     this.likesCount = 0,
     this.commentsCount = 0,
     this.viewsCount = 0,
@@ -312,7 +313,7 @@ class _$VideoModelImpl implements _VideoModel {
   @override
   final String videoUrl;
   @override
-  final String thumbnailUrl;
+  final String? thumbnailUrl;
   @override
   @JsonKey()
   final int likesCount;
@@ -322,9 +323,11 @@ class _$VideoModelImpl implements _VideoModel {
   @override
   @JsonKey()
   final int viewsCount;
+  // ignoreinvalid_annotation_target
   @override
   @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
   final DateTime createdAt;
+  // ignoreinvalid_annotation_target
   @override
   @JsonKey(
     fromJson: _dateTimeFromTimestampNullable,
@@ -404,7 +407,7 @@ abstract class _VideoModel implements VideoModel {
     final String? description,
     final String? game,
     required final String videoUrl,
-    required final String thumbnailUrl,
+    final String? thumbnailUrl,
     final int likesCount,
     final int commentsCount,
     final int viewsCount,
@@ -433,16 +436,16 @@ abstract class _VideoModel implements VideoModel {
   @override
   String get videoUrl;
   @override
-  String get thumbnailUrl;
+  String? get thumbnailUrl;
   @override
   int get likesCount;
   @override
   int get commentsCount;
   @override
-  int get viewsCount;
+  int get viewsCount; // ignoreinvalid_annotation_target
   @override
   @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
-  DateTime get createdAt;
+  DateTime get createdAt; // ignoreinvalid_annotation_target
   @override
   @JsonKey(
     fromJson: _dateTimeFromTimestampNullable,

@@ -16,9 +16,25 @@ import 'core/providers/auth_providers.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  
+  // Inicializa o Firebase apenas se ainda não foi inicializado
+  // O plugin google-services pode inicializar automaticamente no Android
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } on FirebaseException catch (e) {
+    // Se já existe uma instância do Firebase, apenas continua
+    if (e.code == 'duplicate-app') {
+      // Firebase já foi inicializado, continua normalmente
+    } else {
+      rethrow;
+    }
+  } catch (e) {
+    // Outros erros são relançados
+    rethrow;
+  }
+  
   runApp(
     const ProviderScope(
       child: GameTrackApp(),

@@ -29,9 +29,10 @@ mixin _$UserModel {
   int get score => throw _privateConstructorUsedError;
   int get followersCount => throw _privateConstructorUsedError;
   int get followingCount => throw _privateConstructorUsedError;
-  int get videosCount => throw _privateConstructorUsedError;
+  int get videosCount =>
+      throw _privateConstructorUsedError; // ignoreinvalid_annotation_target
   @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
-  DateTime get createdAt => throw _privateConstructorUsedError;
+  DateTime get createdAt => throw _privateConstructorUsedError; // ignoreinvalid_annotation_target
   @JsonKey(
     fromJson: _dateTimeFromTimestampNullable,
     toJson: _dateTimeToTimestampNullable,
@@ -305,9 +306,11 @@ class _$UserModelImpl implements _UserModel {
   @override
   @JsonKey()
   final int videosCount;
+  // ignoreinvalid_annotation_target
   @override
   @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
   final DateTime createdAt;
+  // ignoreinvalid_annotation_target
   @override
   @JsonKey(
     fromJson: _dateTimeFromTimestampNullable,
@@ -417,10 +420,10 @@ abstract class _UserModel implements UserModel {
   @override
   int get followingCount;
   @override
-  int get videosCount;
+  int get videosCount; // ignoreinvalid_annotation_target
   @override
   @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
-  DateTime get createdAt;
+  DateTime get createdAt; // ignoreinvalid_annotation_target
   @override
   @JsonKey(
     fromJson: _dateTimeFromTimestampNullable,

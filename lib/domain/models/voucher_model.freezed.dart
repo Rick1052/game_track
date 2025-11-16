@@ -29,9 +29,10 @@ mixin _$VoucherModel {
   int get pointsCost => throw _privateConstructorUsedError;
   String get imageUrl => throw _privateConstructorUsedError;
   int get stock => throw _privateConstructorUsedError;
-  bool get isActive => throw _privateConstructorUsedError;
+  bool get isActive =>
+      throw _privateConstructorUsedError; // ignoreinvalid_annotation_target
   @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
-  DateTime get createdAt => throw _privateConstructorUsedError;
+  DateTime get createdAt => throw _privateConstructorUsedError; // ignoreinvalid_annotation_target
   @JsonKey(
     fromJson: _dateTimeFromTimestampNullable,
     toJson: _dateTimeToTimestampNullable,
@@ -291,9 +292,11 @@ class _$VoucherModelImpl implements _VoucherModel {
   @override
   @JsonKey()
   final bool isActive;
+  // ignoreinvalid_annotation_target
   @override
   @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
   final DateTime createdAt;
+  // ignoreinvalid_annotation_target
   @override
   @JsonKey(
     fromJson: _dateTimeFromTimestampNullable,
@@ -396,10 +399,10 @@ abstract class _VoucherModel implements VoucherModel {
   @override
   int get stock;
   @override
-  bool get isActive;
+  bool get isActive; // ignoreinvalid_annotation_target
   @override
   @JsonKey(fromJson: _dateTimeFromTimestamp, toJson: _dateTimeToTimestamp)
-  DateTime get createdAt;
+  DateTime get createdAt; // ignoreinvalid_annotation_target
   @override
   @JsonKey(
     fromJson: _dateTimeFromTimestampNullable,

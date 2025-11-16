@@ -9,5 +9,7 @@ final firebaseAuthProvider = Provider<FirebaseAuth>((ref) => FirebaseAuth.instan
 final firebaseFirestoreProvider = Provider<FirebaseFirestore>((ref) => FirebaseFirestore.instance);
 final firebaseStorageProvider = Provider<FirebaseStorage>((ref) => FirebaseStorage.instance);
 final firebaseFunctionsProvider = Provider<FirebaseFunctions>((ref) => FirebaseFunctions.instance);
-final googleSignInProvider = Provider<GoogleSignIn>((ref) => GoogleSignIn());
+final googleSignInProvider = Provider<GoogleSignIn>((ref) => GoogleSignIn(
+  scopes: ['email', 'profile'],
+));
 

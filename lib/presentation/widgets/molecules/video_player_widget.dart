@@ -4,14 +4,14 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 class VideoPlayerWidget extends StatefulWidget {
   final String videoUrl;
-  final String thumbnailUrl;
+  final String? thumbnailUrl;
   final bool autoPlay;
   final double? aspectRatio;
 
   const VideoPlayerWidget({
     super.key,
     required this.videoUrl,
-    required this.thumbnailUrl,
+    this.thumbnailUrl,
     this.autoPlay = true,
     this.aspectRatio,
   });
@@ -81,14 +81,16 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
           children: [
             if (_isInitialized)
               VideoPlayer(_controller)
-            else
+            else if (widget.thumbnailUrl != null)
               Image.network(
-                widget.thumbnailUrl,
+                widget.thumbnailUrl!,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
                   return Container(color: Colors.black);
                 },
-              ),
+              )
+            else
+              Container(color: Colors.black),
             if (!_isInitialized)
               const Center(
                 child: CircularProgressIndicator(),
