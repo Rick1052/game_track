@@ -1,4 +1,7 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../domain/repositories/user_repository.dart';
 import '../../domain/models/user_model.dart';
 import '../../core/constants/firestore_collections.dart';
@@ -6,9 +9,16 @@ import '../../core/constants/app_constants.dart';
 
 class UserRepositoryImpl implements UserRepository {
   final FirebaseFirestore _firestore;
+  final FirebaseStorage _storage;
+  final FirebaseAuth _auth;
 
-  UserRepositoryImpl({required FirebaseFirestore firestore})
-      : _firestore = firestore;
+  UserRepositoryImpl({
+    required FirebaseFirestore firestore,
+    required FirebaseStorage storage,
+    required FirebaseAuth auth,
+  })  : _firestore = firestore,
+        _storage = storage,
+        _auth = auth;
 
   @override
   Future<UserModel> getUserById(String userId) async {
@@ -237,6 +247,91 @@ class UserRepositoryImpl implements UserRepository {
         .update({
       'videosCount': FieldValue.increment(1),
     });
+  }
+
+  @override
+  Future<String> uploadImage(String filePath, String userId) async {
+    final user = _auth.currentUser;
+    if (user == null) throw Exception('Usuário não autenticado');
+    
+    // Verificar se o usuário está tentando fazer upload da própria imagem
+    if (user.uid != userId) {
+      throw Exception('Você só pode fazer upload da sua própria imagem');
+    }
+
+    final imageFile = File(filePath);
+    
+    // Verificar se o arquivo existe
+    if (!await imageFile.exists()) {
+      throw Exception('Arquivo de imagem não encontrado: $filePath');
+    }
+
+    // Verificar tamanho do arquivo (max 5MB para imagens)
+    final fileSize = await imageFile.length();
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (fileSize > maxSize) {
+      throw Exception('Imagem muito grande. Tamanho máximo: 5MB');
+    }
+
+    try {
+      // Determinar extensão do arquivo
+      final extension = filePath.split('.').last.toLowerCase();
+      if (!['jpg', 'jpeg', 'png', 'webp'].contains(extension)) {
+        throw Exception('Formato de imagem não suportado. Use JPG, PNG ou WebP');
+      }
+
+      final imageFileName = '$userId.$extension';
+
+      // Upload da imagem
+      final imageRef = _storage
+          .ref()
+          .child(AppConstants.avatarsStoragePath)
+          .child(imageFileName);
+
+      final uploadTask = imageRef.putFile(imageFile);
+      
+      // Aguardar o upload completar
+      await uploadTask;
+      
+      // Obter a URL de download com retry em caso de erro
+      // O Firebase Storage pode levar um tempo para disponibilizar o arquivo
+      int retries = 5;
+      int delayMs = 1000;
+      String? imageUrl;
+      
+      while (retries > 0) {
+        try {
+          await Future.delayed(Duration(milliseconds: delayMs));
+          imageUrl = await imageRef.getDownloadURL();
+          break;
+        } catch (e) {
+          retries--;
+          if (retries == 0) {
+            throw Exception('Erro ao obter URL da imagem após upload: $e');
+          }
+          // Aumentar o tempo de espera a cada tentativa
+          delayMs += 500;
+        }
+      }
+
+      // Verificar se a URL foi obtida com sucesso
+      if (imageUrl == null) {
+        throw Exception('Não foi possível obter a URL da imagem após o upload');
+      }
+
+      // Atualizar o avatarUrl do usuário no Firestore
+      await _firestore
+          .collection(FirestoreCollections.users)
+          .doc(userId)
+          .update({
+        'avatarUrl': imageUrl,
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+
+      return imageUrl;
+    } catch (e) {
+      throw Exception('Erro ao fazer upload da imagem: $e');
+    }
   }
 }
 

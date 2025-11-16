@@ -4,19 +4,23 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../domain/models/user_model.dart';
 import '../../core/constants/firestore_collections.dart';
+import '../../services/notification_service.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final FirebaseAuth _auth;
   final FirebaseFirestore _firestore;
   final GoogleSignIn _googleSignIn;
+  final NotificationService? _notificationService;
 
   AuthRepositoryImpl({
     required FirebaseAuth auth,
     required FirebaseFirestore firestore,
     required GoogleSignIn googleSignIn,
+    NotificationService? notificationService,
   })  : _auth = auth,
         _firestore = firestore,
-        _googleSignIn = googleSignIn;
+        _googleSignIn = googleSignIn,
+        _notificationService = notificationService;
 
   @override
   Stream<User?> get authStateChanges => _auth.authStateChanges();
@@ -34,7 +38,12 @@ class AuthRepositoryImpl implements AuthRepository {
         email: email,
         password: password,
       );
-      return await _getOrCreateUserData(credential.user!);
+      final userModel = await _getOrCreateUserData(credential.user!);
+      
+      // Salvar token FCM e enviar notificação de boas-vindas
+      await _handleLoginSuccess(credential.user!.uid);
+      
+      return userModel;
     } catch (e) {
       throw Exception('Erro ao fazer login: $e');
     }
@@ -100,7 +109,12 @@ class AuthRepositoryImpl implements AuthRepository {
       );
 
       final userCredential = await _auth.signInWithCredential(credential);
-      return await _getOrCreateUserData(userCredential.user!);
+      final userModel = await _getOrCreateUserData(userCredential.user!);
+      
+      // Salvar token FCM e enviar notificação de boas-vindas
+      await _handleLoginSuccess(userCredential.user!.uid);
+      
+      return userModel;
     } catch (e) {
       String errorMessage = 'Erro ao fazer login com Google';
       final errorString = e.toString();
@@ -119,10 +133,17 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<void> signOut() async {
+    final userId = _auth.currentUser?.uid;
+    
     await Future.wait([
       _auth.signOut(),
       _googleSignIn.signOut(),
     ]);
+    
+    // Remover token FCM ao fazer logout
+    if (userId != null && _notificationService != null) {
+      await _notificationService!.removeUserToken(userId);
+    }
   }
 
   @override
@@ -188,6 +209,45 @@ class AuthRepositoryImpl implements AuthRepository {
     final data = doc.data()!;
     data['id'] = userId; // Adiciona o ID ao JSON
     return UserModel.fromJson(data);
+  }
+
+  /// Lida com o sucesso do login: salva token FCM e envia notificação
+  Future<void> _handleLoginSuccess(String userId) async {
+    if (_notificationService == null) return;
+    
+    try {
+      // Obter token FCM
+      final token = await _notificationService!.getToken();
+      
+      if (token != null) {
+        // Salvar token no Firestore
+        await _notificationService!.saveUserToken(userId, token);
+        
+        // Chamar Cloud Function para enviar notificação de boas-vindas
+        // A função será chamada automaticamente quando o token for salvo
+        // ou podemos chamar diretamente aqui
+        await _sendWelcomeNotification(userId);
+      }
+    } catch (e) {
+      // Não falhar o login se houver erro na notificação
+      print('Erro ao configurar notificações: $e');
+    }
+  }
+
+  /// Envia notificação de boas-vindas via Cloud Function
+  Future<void> _sendWelcomeNotification(String userId) async {
+    try {
+      // Buscar dados do usuário para personalizar a mensagem
+      final userData = await _getUserData(userId);
+      if (userData == null) return;
+
+      // Chamar Cloud Function para enviar notificação
+      // Nota: A Cloud Function será criada para enviar a notificação
+      // Por enquanto, apenas salvamos o token. A função será chamada automaticamente
+      // quando detectar que o token foi atualizado após login
+    } catch (e) {
+      print('Erro ao enviar notificação de boas-vindas: $e');
+    }
   }
 }
 

@@ -7,13 +7,22 @@ import '../../domain/repositories/auth_repository.dart';
 import '../../domain/repositories/video_repository.dart';
 import '../../domain/repositories/user_repository.dart';
 import '../../domain/repositories/voucher_repository.dart';
+import '../../services/notification_service.dart';
 import 'firebase_providers.dart';
+
+final notificationServiceProvider = Provider<NotificationService>((ref) {
+  return NotificationService(
+    messaging: ref.watch(firebaseMessagingProvider),
+    firestore: ref.watch(firebaseFirestoreProvider),
+  );
+});
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   return AuthRepositoryImpl(
     auth: ref.watch(firebaseAuthProvider),
     firestore: ref.watch(firebaseFirestoreProvider),
     googleSignIn: ref.watch(googleSignInProvider),
+    notificationService: ref.watch(notificationServiceProvider),
   );
 });
 
@@ -28,6 +37,8 @@ final videoRepositoryProvider = Provider<VideoRepository>((ref) {
 final userRepositoryProvider = Provider<UserRepository>((ref) {
   return UserRepositoryImpl(
     firestore: ref.watch(firebaseFirestoreProvider),
+    storage: ref.watch(firebaseStorageProvider),
+    auth: ref.watch(firebaseAuthProvider),
   );
 });
 

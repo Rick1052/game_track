@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:game_track/l10n/app_localizations.dart';
 import 'core/config/firebase_options.dart';
@@ -13,6 +14,14 @@ import 'presentation/pages/profile/profile_page.dart';
 import 'presentation/pages/settings/settings_page.dart';
 import 'presentation/pages/catalog/catalog_page.dart';
 import 'core/providers/auth_providers.dart';
+import 'core/providers/repository_providers.dart';
+
+// Handler para notificações em background (deve ser top-level)
+@pragma('vm:entry-point')
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print('Notificação em background: ${message.notification?.title}');
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +44,9 @@ void main() async {
     rethrow;
   }
   
+  // Configurar handler para notificações em background
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  
   runApp(
     const ProviderScope(
       child: GameTrackApp(),
@@ -48,6 +60,12 @@ class GameTrackApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authStateProvider);
+    
+    // Configurar handlers de notificação quando o app inicia
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final notificationService = ref.read(notificationServiceProvider);
+      notificationService.setupNotificationHandlers();
+    });
 
     return MaterialApp(
       title: 'GameTrack',

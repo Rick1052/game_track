@@ -168,3 +168,42 @@ export const onFollowerCreated = functions.firestore
     return null;
   });
 
+// Enviar notificação de boas-vindas quando o usuário faz login
+export const onUserLogin = functions.firestore
+  .document('users/{userId}')
+  .onUpdate(async (change, context) => {
+    const userId = context.params.userId;
+    const beforeData = change.before.data();
+    const afterData = change.after.data();
+
+    // Verificar se o fcmToken foi atualizado (indicando login)
+    const beforeToken = beforeData.fcmToken;
+    const afterToken = afterData.fcmToken;
+
+    // Se o token foi atualizado e não existia antes, é um novo login
+    if (afterToken && afterToken !== beforeToken) {
+      const userDisplayName = afterData.displayName || afterData.username || 'Usuário';
+      
+      const message = {
+        notification: {
+          title: 'Bem-vindo de volta! 👋',
+          body: `Olá ${userDisplayName}, é bom ter você aqui novamente!`,
+        },
+        data: {
+          type: 'login',
+          userId: userId,
+        },
+        token: afterToken,
+      };
+
+      try {
+        await admin.messaging().send(message);
+        console.log(`Notificação de login enviada para ${userId}`);
+      } catch (error) {
+        console.error(`Erro ao enviar notificação de login: ${error}`);
+      }
+    }
+
+    return null;
+  });
+

@@ -120,6 +120,13 @@ class VideoRepositoryImpl implements VideoRepository {
         throw Exception('Arquivo de vídeo não encontrado: $finalPath');
       }
       
+      // Verificar tamanho do arquivo (max 100MB conforme regras do Storage)
+      final fileSize = await videoFile.length();
+      const maxSize = 100 * 1024 * 1024; // 100MB
+      if (fileSize > maxSize) {
+        throw Exception('Vídeo muito grande. Tamanho máximo: 100MB. Tamanho atual: ${(fileSize / 1024 / 1024).toStringAsFixed(2)}MB');
+      }
+      
       final videoFileName = '$videoId.mp4';
 
       // Upload do vídeo
@@ -128,27 +135,75 @@ class VideoRepositoryImpl implements VideoRepository {
           .child(AppConstants.videosStoragePath)
           .child(videoFileName);
 
+      // Upload do vídeo
       final uploadTask = videoRef.putFile(videoFile);
       
       // Aguardar o upload completar
-      await uploadTask;
+      try {
+        await uploadTask;
+      } catch (uploadError) {
+        throw Exception('Erro durante o upload do vídeo: $uploadError');
+      }
       
-      // Obter a URL de download com retry em caso de erro
-      // O Firebase Storage pode levar um tempo para disponibilizar o arquivo
-      int retries = 5;
-      int delayMs = 1000;
-      while (retries > 0) {
+      // Aguardar um tempo inicial para o Firebase Storage processar o arquivo
+      // Arquivos grandes podem precisar de mais tempo
+      await Future.delayed(const Duration(milliseconds: 2000));
+      
+      // Obter a URL de download com retry robusto
+      // O Firebase Storage pode levar tempo para disponibilizar o arquivo
+      int retries = 10;
+      int delayMs = 2000;
+      Exception? lastError;
+      bool success = false;
+      
+      while (retries > 0 && !success) {
         try {
-          await Future.delayed(Duration(milliseconds: delayMs));
+          // Tentar obter a URL
           videoUrl = await videoRef.getDownloadURL();
-          break;
-        } catch (e) {
-          retries--;
-          if (retries == 0) {
-            throw Exception('Erro ao obter URL do vídeo após upload: $e');
+          
+          // Verificar se a URL é válida
+          if (videoUrl.isNotEmpty) {
+            // Verificar se a URL é acessível fazendo uma verificação adicional
+            try {
+              final metadata = await videoRef.getMetadata();
+              if (metadata.size != null && metadata.size! > 0) {
+                success = true;
+                break; // Sucesso confirmado!
+              }
+            } catch (_) {
+              // Metadata não disponível ainda, mas URL foi obtida
+              success = true;
+              break;
+            }
           }
-          // Aumentar o tempo de espera a cada tentativa
-          delayMs += 500;
+        } catch (e) {
+          lastError = e is Exception ? e : Exception(e.toString());
+          retries--;
+          
+          if (retries == 0) {
+            // Última tentativa falhou - fazer diagnóstico completo
+            try {
+              final metadata = await videoRef.getMetadata();
+              // Arquivo existe mas não conseguimos a URL
+              final sizeInfo = metadata.size != null ? '${metadata.size} bytes' : 'tamanho desconhecido';
+              throw Exception(
+                'Arquivo existe no Storage ($sizeInfo) mas não foi possível obter URL. '
+                'Erro: $lastError. Tente novamente em alguns instantes.'
+              );
+            } catch (metadataError) {
+              // Arquivo não existe - o upload pode ter falhado silenciosamente
+              throw Exception(
+                'Vídeo não encontrado no Storage após upload. '
+                'O upload pode ter falhado ou o arquivo foi deletado. '
+                'Erro original: $lastError. '
+                'Verifique sua conexão e tente novamente.'
+              );
+            }
+          }
+          
+          // Aguardar antes da próxima tentativa (delay progressivo)
+          await Future.delayed(Duration(milliseconds: delayMs));
+          delayMs = (delayMs * 1.2).round(); // Aumentar 20% a cada tentativa
         }
       }
 
@@ -301,23 +356,43 @@ class VideoRepositoryImpl implements VideoRepository {
       final uploadTask = thumbnailRef.putFile(thumbnail);
       
       // Aguardar o upload completar
-      await uploadTask;
+      try {
+        await uploadTask;
+      } catch (uploadError) {
+        throw Exception('Erro durante o upload do thumbnail: $uploadError');
+      }
       
-      // Obter a URL de download com retry em caso de erro
-      // O Firebase Storage pode levar um tempo para disponibilizar o arquivo
-      int retries = 5;
-      int delayMs = 1000;
+      // Aguardar um tempo para o Firebase Storage processar
+      await Future.delayed(const Duration(milliseconds: 1500));
+      
+      // Obter a URL de download com retry
+      int retries = 8;
+      int delayMs = 1500;
+      Exception? lastError;
+      
       while (retries > 0) {
         try {
-          await Future.delayed(Duration(milliseconds: delayMs));
-          return await thumbnailRef.getDownloadURL();
-        } catch (e) {
-          retries--;
-          if (retries == 0) {
-            throw Exception('Erro ao obter URL do thumbnail após upload: $e');
+          final url = await thumbnailRef.getDownloadURL();
+          if (url.isNotEmpty) {
+            return url;
           }
-          // Aumentar o tempo de espera a cada tentativa
-          delayMs += 500;
+        } catch (e) {
+          lastError = e is Exception ? e : Exception(e.toString());
+          retries--;
+          
+          if (retries == 0) {
+            // Verificar se o arquivo existe
+            try {
+              final metadata = await thumbnailRef.getMetadata();
+              final sizeInfo = metadata.size != null ? '${metadata.size} bytes' : 'tamanho desconhecido';
+              throw Exception('Thumbnail existe no Storage ($sizeInfo) mas não foi possível obter URL. Erro: $lastError');
+            } catch (metadataError) {
+              throw Exception('Thumbnail não encontrado no Storage. Erro: $lastError');
+            }
+          }
+          
+          await Future.delayed(Duration(milliseconds: delayMs));
+          delayMs = (delayMs * 1.2).round();
         }
       }
       

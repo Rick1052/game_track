@@ -11,5 +11,6 @@ abstract class UserRepository {
   Future<List<UserModel>> getFollowing(String userId);
   Future<void> updateUserScore(String userId, int points);
   Future<void> incrementUserVideosCount(String userId);
+  Future<String> uploadImage(String filePath, String userId);
 }
 
